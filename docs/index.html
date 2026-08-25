@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Lyrix — Lightweight Floating Synced Lyrics for macOS</title>
-  <meta name="description" content="A lightweight, transparent floating lyrics overlay for macOS. Passively syncs with Zen Browser, Spotify, Chrome, and Apple Music with sub-second accuracy." />
+  <meta name="description" content="A lightweight, transparent floating lyrics overlay for macOS. Passively syncs with Spotify, Zen Browser, Chrome, and Apple Music with sub-second accuracy." />
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -47,7 +47,7 @@
       <div class="pill-badge">macOS 14.0+ &middot; Apple Silicon &amp; Intel &middot; Open Source</div>
       <h1 class="hero-title">Real-time floating lyrics overlay for macOS.</h1>
       <p class="hero-subtitle">
-        Lyrix passively detects audio playback from browsers and desktop media players, computes millisecond timeline interpolations, and renders time-synced lyrics on a borderless, transparent canvas.
+        Lyrix passively detects audio playback from Spotify, Zen Browser, Chrome, and Apple Music. It computes sub-second timeline interpolations and renders synced lyrics on a lightweight, draggable glass canvas.
       </p>
 
       <div class="hero-cta">
@@ -66,62 +66,135 @@
         <span class="meta-dot"></span>
         <span>MIT License</span>
         <span class="meta-dot"></span>
-        <span>By <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer">Narix Baliga</a></span>
+        <span>By <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer">Kiran S Baliga</a></span>
       </div>
     </div>
 
-    <!-- Live Interactive Preview Widget -->
+    <!-- Live Interactive Preview Widget (Spotify UI + Floating Lyrix Overlay) -->
     <div class="hero-preview">
       <div class="desktop-mockup">
+        <!-- macOS Window Titlebar -->
         <div class="window-chrome">
           <div class="window-dots">
             <span class="dot dot-red"></span>
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <div class="window-title">Lyrix Live Desktop Preview</div>
+          <div class="window-title">Spotify — Desktop &middot; Lyrix Overlay Active</div>
           <div class="window-controls">
             <button id="themeToggle" class="preview-tag">Glow: Cyan</button>
           </div>
         </div>
 
+        <!-- Desktop Viewport -->
         <div class="desktop-stage" id="desktopStage">
-          <!-- Floating Overlay Card -->
+
+          <!-- Simulated Spotify App Interface in Background -->
+          <div class="spotify-app">
+            <div class="spotify-main">
+              <!-- Spotify Sidebar -->
+              <div class="spotify-sidebar">
+                <div class="spotify-brand">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="#1DB954"><circle cx="12" cy="12" r="10"/><path d="M7 9.5c3.5-.8 7-.5 10 1.2M7.5 12.5c3-.6 6-.3 8.5 1M8 15.5c2.3-.4 4.7-.2 6.5.8" stroke="#000" stroke-width="1.8" stroke-linecap="round"/></svg>
+                  <span>Spotify</span>
+                </div>
+                <div class="spotify-nav-item active">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                  Home
+                </div>
+                <div class="spotify-nav-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                  Search
+                </div>
+                <div class="spotify-nav-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                  Your Library
+                </div>
+              </div>
+
+              <!-- Spotify Track Header / Album View -->
+              <div class="spotify-content">
+                <div class="spotify-header-banner">
+                  <div class="spotify-album-art" id="spotifyArtwork">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
+                  </div>
+                  <div class="spotify-track-meta">
+                    <span class="spotify-tag">PLAYING FROM PLAYLIST</span>
+                    <h3 class="spotify-track-name" id="spotifyTitle">Starboy</h3>
+                    <p class="spotify-track-sub" id="spotifyArtist">The Weeknd, Daft Punk &middot; Starboy &middot; 2016</p>
+                  </div>
+                </div>
+
+                <div class="spotify-tracklist">
+                  <div class="spotify-row active">
+                    <span class="row-num">1</span>
+                    <div class="row-info">
+                      <span class="row-name" id="rowTrackName">Starboy</span>
+                      <span class="row-artist" id="rowArtistName">The Weeknd, Daft Punk</span>
+                    </div>
+                    <span class="row-duration">03:50</span>
+                  </div>
+                  <div class="spotify-row">
+                    <span class="row-num">2</span>
+                    <div class="row-info">
+                      <span class="row-name">Party Monster</span>
+                      <span class="row-artist">The Weeknd</span>
+                    </div>
+                    <span class="row-duration">04:09</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Spotify Bottom Playback Bar -->
+            <div class="spotify-bottom-bar">
+              <div class="bottom-left">
+                <div class="mini-art"></div>
+                <div class="mini-meta">
+                  <span class="mini-title" id="miniTitle">Starboy</span>
+                  <span class="mini-artist" id="miniArtist">The Weeknd</span>
+                </div>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="#1DB954"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+              </div>
+
+              <div class="bottom-center">
+                <div class="spotify-player-controls">
+                  <button class="sp-btn" id="prevTrackBtn" title="Previous">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2.5"/></svg>
+                  </button>
+                  <button class="sp-btn sp-play" id="playPauseBtn" title="Play/Pause">
+                    <svg id="playIcon" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+                  </button>
+                  <button class="sp-btn" id="nextTrackBtn" title="Next">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2.5"/></svg>
+                  </button>
+                </div>
+                <div class="sp-progress-row">
+                  <span class="sp-time" id="spCurrentTime">01:14</span>
+                  <div class="sp-progress-bar">
+                    <div class="sp-progress-fill" id="progressFill" style="width: 32%;"></div>
+                  </div>
+                  <span class="sp-time" id="spTotalTime">03:50</span>
+                </div>
+              </div>
+
+              <div class="bottom-right">
+                <span class="lyrix-live-badge">Lyrix Active</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Lyrix Floating Transparent Overlay (Draggable anywhere over desktop) -->
           <div class="floating-overlay" id="interactiveOverlay">
             <div class="overlay-grip"></div>
             <div class="lyrics-container" id="lyricsRoll">
-              <div class="lyric-line line-prev" id="linePrev">I can hear the rhythm in the dark</div>
-              <div class="lyric-line line-current" id="lineCurrent">Tracing every outline of your heart</div>
-              <div class="lyric-line line-next" id="lineNext">Before the morning comes to pull us apart</div>
+              <div class="lyric-line line-prev" id="linePrev">I'm tryna put you in the worst mood, ah</div>
+              <div class="lyric-line line-current" id="lineCurrent">P1 cleaner than your church shoes, ah</div>
+              <div class="lyric-line line-next" id="lineNext">Milli point two just to hurt you, ah</div>
             </div>
           </div>
 
-          <!-- Player Controls Bar for Demo -->
-          <div class="demo-player-bar">
-            <div class="track-info">
-              <span class="track-title" id="demoTitle">Claw Marks</span>
-              <span class="track-artist" id="demoArtist">panicbaby</span>
-            </div>
-
-            <div class="player-controls">
-              <button class="ctrl-btn" id="prevTrackBtn" title="Previous Line">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"/><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"/></svg>
-              </button>
-              <button class="ctrl-btn ctrl-play" id="playPauseBtn" title="Play/Pause">
-                <svg id="playIcon" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </button>
-              <button class="ctrl-btn" id="nextTrackBtn" title="Next Line">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"/></svg>
-              </button>
-            </div>
-
-            <div class="progress-wrapper">
-              <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 42%;"></div>
-              </div>
-              <span class="progress-time" id="progressTime">01:14 / 02:58</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -192,14 +265,14 @@
     <div class="container">
       <div class="section-header">
         <h2 class="section-title">Universal Player Compatibility</h2>
-        <p class="section-subtitle">Supports all major web browsers and native desktop music applications.</p>
+        <p class="section-subtitle">Supports all major desktop music applications and web browsers.</p>
       </div>
 
       <div class="players-row">
-        <div class="player-pill">Zen Browser (YouTube Music)</div>
-        <div class="player-pill">Google Chrome</div>
         <div class="player-pill">Spotify Desktop</div>
+        <div class="player-pill">Zen Browser (YouTube Music)</div>
         <div class="player-pill">Apple Music</div>
+        <div class="player-pill">Google Chrome</div>
         <div class="player-pill">Arc Browser</div>
         <div class="player-pill">Brave Browser</div>
       </div>
@@ -295,7 +368,7 @@ swift build -c release
         <a href="https://github.com/narix/lyrix" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
         <a href="https://github.com/narix/lyrix/releases" target="_blank" rel="noopener noreferrer">Releases</a>
         <a href="https://github.com/narix/lyrix/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
-        <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer" class="footer-author">Developer: baliga.dev</a>
+        <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer" class="footer-author">Developer: Kiran S Baliga (baliga.dev)</a>
       </div>
     </div>
   </footer>

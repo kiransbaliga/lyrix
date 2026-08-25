@@ -1,22 +1,46 @@
-// Interactive Hero Preview Controller for Lyrix Website
+// Interactive Live Preview: Spotify Player + Lyrix Floating Overlay
 
-const sampleLyrics = [
-  "I was drowning in the static of the city lights",
-  "Looking for a signal in the crowded nights",
-  "I can hear the rhythm in the dark",
-  "Tracing every outline of your heart",
-  "Before the morning comes to pull us apart",
-  "We are moving like shadows on the floor",
-  "Never wanted anything so much more",
-  "Hold the frequency until the break of dawn",
-  "Even when the melody is gone"
+const sampleTracks = [
+  {
+    title: "Starboy",
+    artist: "The Weeknd, Daft Punk",
+    album: "Starboy",
+    duration: 230, // 3:50
+    lyrics: [
+      { time: 10, text: "I'm tryna put you in the worst mood, ah" },
+      { time: 14, text: "P1 cleaner than your church shoes, ah" },
+      { time: 18, text: "Milli point two just to hurt you, ah" },
+      { time: 22, text: "All red Lamb' just to tease you, ah" },
+      { time: 26, text: "None of these toys on lease too, ah" },
+      { time: 30, text: "Made your whole year in a week too, yah" },
+      { time: 34, text: "Main bitch out your league too, ah" },
+      { time: 38, text: "Side bitch out of your league too, ah" },
+      { time: 42, text: "Look what you've done" },
+      { time: 46, text: "I'm a motherfuckin' starboy" }
+    ]
+  },
+  {
+    title: "Claw Marks",
+    artist: "panicbaby",
+    album: "Claw Marks",
+    duration: 178, // 2:58
+    lyrics: [
+      { time: 8, text: "I was drowning in the static of the city lights" },
+      { time: 14, text: "Looking for a signal in the crowded nights" },
+      { time: 20, text: "I can hear the rhythm in the dark" },
+      { time: 26, text: "Tracing every outline of your heart" },
+      { time: 32, text: "Before the morning comes to pull us apart" },
+      { time: 38, text: "We are moving like shadows on the floor" },
+      { time: 44, text: "Never wanted anything so much more" }
+    ]
+  }
 ];
 
-let currentIndex = 3;
+let trackIndex = 0;
+let lyricIndex = 1;
 let isPlaying = true;
-let progressSeconds = 74;
-const totalDuration = 178; // 2:58
-let playbackTimer = null;
+let currentSeconds = 14;
+let timer = null;
 
 // Glow color themes
 const glowThemes = [
@@ -31,31 +55,53 @@ let currentThemeIndex = 0;
 const linePrev = document.getElementById("linePrev");
 const lineCurrent = document.getElementById("lineCurrent");
 const lineNext = document.getElementById("lineNext");
+
 const playPauseBtn = document.getElementById("playPauseBtn");
 const playIcon = document.getElementById("playIcon");
 const prevTrackBtn = document.getElementById("prevTrackBtn");
 const nextTrackBtn = document.getElementById("nextTrackBtn");
+
+const spCurrentTime = document.getElementById("spCurrentTime");
+const spTotalTime = document.getElementById("spTotalTime");
 const progressFill = document.getElementById("progressFill");
-const progressTime = document.getElementById("progressTime");
+
+const spotifyTitle = document.getElementById("spotifyTitle");
+const spotifyArtist = document.getElementById("spotifyArtist");
+const miniTitle = document.getElementById("miniTitle");
+const miniArtist = document.getElementById("miniArtist");
+const rowTrackName = document.getElementById("rowTrackName");
+const rowArtistName = document.getElementById("rowArtistName");
+
 const themeToggle = document.getElementById("themeToggle");
 const interactiveOverlay = document.getElementById("interactiveOverlay");
-const desktopStage = document.getElementById("desktopStage");
 
-// Format seconds -> mm:ss
 function formatTime(sec) {
   const m = Math.floor(sec / 60);
   const s = Math.floor(sec % 60);
   return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 
-// Update Lyrics View
-function updateLyrics(animate = true) {
-  const prevText = currentIndex > 0 ? sampleLyrics[currentIndex - 1] : "";
-  const currentText = sampleLyrics[currentIndex] || "";
-  const nextText = currentIndex < sampleLyrics.length - 1 ? sampleLyrics[currentIndex + 1] : "";
+function updateTrackUI() {
+  const track = sampleTracks[trackIndex];
+  spotifyTitle.textContent = track.title;
+  spotifyArtist.textContent = `${track.artist} · ${track.album}`;
+  miniTitle.textContent = track.title;
+  miniArtist.textContent = track.artist.split(",")[0];
+  rowTrackName.textContent = track.title;
+  rowArtistName.textContent = track.artist;
+  spTotalTime.textContent = formatTime(track.duration);
+}
+
+function updateLyricsUI(animate = true) {
+  const track = sampleTracks[trackIndex];
+  const lyrics = track.lyrics;
+  
+  const prevText = lyricIndex > 0 ? lyrics[lyricIndex - 1].text : "";
+  const currentText = lyrics[lyricIndex] ? lyrics[lyricIndex].text : "";
+  const nextText = lyricIndex < lyrics.length - 1 ? lyrics[lyricIndex + 1].text : "";
 
   if (animate) {
-    lineCurrent.style.opacity = "0.4";
+    lineCurrent.style.opacity = "0.35";
     lineCurrent.style.transform = "scale(0.96) translateY(-4px)";
     
     setTimeout(() => {
@@ -73,65 +119,74 @@ function updateLyrics(animate = true) {
   }
 }
 
-// Update Progress Bar
 function updateProgress() {
-  const pct = (progressSeconds / totalDuration) * 100;
+  const track = sampleTracks[trackIndex];
+  const pct = (currentSeconds / track.duration) * 100;
   progressFill.style.width = `${pct}%`;
-  progressTime.textContent = `${formatTime(progressSeconds)} / ${formatTime(totalDuration)}`;
+  spCurrentTime.textContent = formatTime(currentSeconds);
 }
 
-// Step timeline forward
 function stepForward() {
-  if (currentIndex < sampleLyrics.length - 1) {
-    currentIndex++;
+  const track = sampleTracks[trackIndex];
+  if (lyricIndex < track.lyrics.length - 1) {
+    lyricIndex++;
+    currentSeconds = track.lyrics[lyricIndex].time;
   } else {
-    currentIndex = 0;
-    progressSeconds = 10;
+    trackIndex = (trackIndex + 1) % sampleTracks.length;
+    lyricIndex = 0;
+    currentSeconds = sampleTracks[trackIndex].lyrics[0].time;
+    updateTrackUI();
   }
-  progressSeconds = Math.min(totalDuration, progressSeconds + 18);
-  updateLyrics(true);
+  updateLyricsUI(true);
   updateProgress();
 }
 
-// Step timeline backward
 function stepBackward() {
-  if (currentIndex > 0) {
-    currentIndex--;
+  const track = sampleTracks[trackIndex];
+  if (lyricIndex > 0) {
+    lyricIndex--;
+    currentSeconds = track.lyrics[lyricIndex].time;
+  } else {
+    currentSeconds = 0;
   }
-  progressSeconds = Math.max(0, progressSeconds - 18);
-  updateLyrics(true);
+  updateLyricsUI(true);
   updateProgress();
 }
 
-// Toggle Play / Pause
 function togglePlayback() {
   isPlaying = !isPlaying;
   if (isPlaying) {
     playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-    startTimer();
+    startLoop();
   } else {
     playIcon.innerHTML = '<polygon points="5 3 19 12 5 21 5 3"/>';
-    clearInterval(playbackTimer);
+    clearInterval(timer);
   }
 }
 
-// Start simulation loop
-function startTimer() {
-  clearInterval(playbackTimer);
-  playbackTimer = setInterval(() => {
-    progressSeconds += 1;
-    if (progressSeconds >= totalDuration) {
-      progressSeconds = 0;
-      currentIndex = 0;
-      updateLyrics(true);
-    } else if (progressSeconds % 12 === 0) {
-      stepForward();
+function startLoop() {
+  clearInterval(timer);
+  timer = setInterval(() => {
+    currentSeconds += 1;
+    const track = sampleTracks[trackIndex];
+    
+    // Check if next lyric should trigger
+    if (lyricIndex < track.lyrics.length - 1) {
+      if (currentSeconds >= track.lyrics[lyricIndex + 1].time) {
+        lyricIndex++;
+        updateLyricsUI(true);
+      }
+    } else if (currentSeconds >= track.duration) {
+      trackIndex = (trackIndex + 1) % sampleTracks.length;
+      lyricIndex = 0;
+      currentSeconds = 0;
+      updateTrackUI();
+      updateLyricsUI(true);
     }
     updateProgress();
   }, 1000);
 }
 
-// Cycle theme
 function cycleTheme() {
   currentThemeIndex = (currentThemeIndex + 1) % glowThemes.length;
   const theme = glowThemes[currentThemeIndex];
@@ -140,7 +195,7 @@ function cycleTheme() {
   document.documentElement.style.setProperty("--accent-cyan", theme.hex);
 }
 
-// Interactive Drag Simulation for Demo Card
+// Draggable Overlay Simulation inside desktop stage
 let isDragging = false;
 let startX = 0, startY = 0;
 let currentX = 0, currentY = 0;
@@ -154,8 +209,8 @@ interactiveOverlay.addEventListener("mousedown", (e) => {
 
 window.addEventListener("mousemove", (e) => {
   if (!isDragging) return;
-  currentX = Math.max(-100, Math.min(100, e.clientX - startX));
-  currentY = Math.max(-40, Math.min(40, e.clientY - startY));
+  currentX = Math.max(-40, Math.min(220, e.clientX - startX));
+  currentY = Math.max(-20, Math.min(180, e.clientY - startY));
   interactiveOverlay.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
 });
 
@@ -165,14 +220,14 @@ window.addEventListener("mouseup", () => {
   interactiveOverlay.style.cursor = "grab";
 });
 
-// Event Listeners
+// Event Bindings
 playPauseBtn.addEventListener("click", togglePlayback);
 nextTrackBtn.addEventListener("click", stepForward);
 prevTrackBtn.addEventListener("click", stepBackward);
 themeToggle.addEventListener("click", cycleTheme);
 
 // Initialize
-updateLyrics(false);
+updateTrackUI();
+updateLyricsUI(false);
 updateProgress();
-playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-startTimer();
+startLoop();

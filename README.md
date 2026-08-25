@@ -2,7 +2,7 @@
 
 A lightweight, transparent floating lyrics overlay for macOS. Lyrix passively listens to system-wide media playback events and displays time-synced lyrics with sub-second timeline interpolation and hardware-accelerated animations.
 
-Author: [Narix Baliga](https://baliga.dev)  
+Author: [Kiran S Baliga](https://baliga.dev)  
 License: [MIT](LICENSE)
 
 ---
@@ -161,4 +161,4 @@ lyrix/
 
 This project is open source and available under the [MIT License](LICENSE).
 
-Developed by [Narix Baliga](https://baliga.dev).
+Developed by [Kiran S Baliga](https://baliga.dev).
