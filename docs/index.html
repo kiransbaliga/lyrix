@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Lyrix — Lightweight Floating Synced Lyrics for macOS</title>
-  <meta name="description" content="A lightweight, transparent floating lyrics overlay for macOS. Passively syncs with Spotify, Zen Browser, Chrome, and Apple Music with sub-second accuracy." />
+  <title>Lyrix — Music you can glance at.</title>
+  <meta name="description" content="A floating, transparent lyrics overlay for macOS. Synchronized with your music in real time." />
   <link rel="stylesheet" href="style.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -27,50 +27,63 @@
 
       <nav class="nav-links">
         <a href="#features">Features</a>
-        <a href="#architecture">Architecture</a>
-        <a href="#benchmarks">Benchmarks</a>
+        <a href="#experience">Experience</a>
+        <a href="#specs">Specs</a>
         <a href="https://github.com/narix/lyrix" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer" class="nav-portfolio">baliga.dev</a>
       </nav>
 
       <div class="nav-actions">
         <a href="https://github.com/narix/lyrix/releases/latest/download/Lyrix-Installer.dmg" class="btn btn-primary btn-sm">
-          Download .DMG
+          Download for Mac
         </a>
       </div>
     </div>
   </header>
 
+  <!-- Globally Draggable Floating Lyrix Overlay (Can be moved anywhere on the entire page!) -->
+  <div class="global-floating-overlay" id="interactiveOverlay">
+    <div class="overlay-drag-header">
+      <div class="overlay-grip"></div>
+      <span class="overlay-hint">Drag me anywhere</span>
+    </div>
+    <div class="lyrics-container" id="lyricsRoll">
+      <div class="lyric-line line-prev" id="linePrev">I'm tryna put you in the worst mood, ah</div>
+      <div class="lyric-line line-current" id="lineCurrent">P1 cleaner than your church shoes, ah</div>
+      <div class="lyric-line line-next" id="lineNext">Milli point two just to hurt you, ah</div>
+    </div>
+  </div>
+
   <!-- Hero Section -->
   <section class="hero">
     <div class="hero-content">
-      <div class="pill-badge">macOS 14.0+ &middot; Apple Silicon &amp; Intel &middot; Open Source</div>
-      <h1 class="hero-title">Real-time floating lyrics overlay for macOS.</h1>
+      <div class="pill-badge">Designed for macOS Sonoma &amp; Sequoia</div>
+      <h1 class="hero-title">Music you can glance at.</h1>
       <p class="hero-subtitle">
-        Lyrix passively detects audio playback from Spotify, Zen Browser, Chrome, and Apple Music. It computes sub-second timeline interpolations and renders synced lyrics on a lightweight, draggable glass canvas.
+        Lyrix floats seamlessly above your workspace. It listens to whatever you’re playing and delivers time-synced lyrics with fluid ProMotion motion and pure transparency.
       </p>
 
       <div class="hero-cta">
         <a href="https://github.com/narix/lyrix/releases/latest/download/Lyrix-Installer.dmg" class="btn btn-primary">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Download Installer (.dmg)
+          Download Free (.dmg)
         </a>
         <a href="https://github.com/narix/lyrix" class="btn btn-secondary" target="_blank" rel="noopener noreferrer">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          Source Code
+          View on GitHub
         </a>
       </div>
 
       <div class="hero-meta">
-        <span>Version 1.0.0</span>
+        <span>macOS 14.0+</span>
         <span class="meta-dot"></span>
-        <span>MIT License</span>
+        <span>Universal Binary</span>
         <span class="meta-dot"></span>
         <span>By <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer">Kiran S Baliga</a></span>
       </div>
     </div>
 
-    <!-- Live Interactive Preview Widget (Spotify UI + Floating Lyrix Overlay) -->
+    <!-- Live Interactive Preview Widget (Spotify UI Demo) -->
     <div class="hero-preview">
       <div class="desktop-mockup">
         <!-- macOS Window Titlebar -->
@@ -80,7 +93,7 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <div class="window-title">Spotify — Desktop &middot; Lyrix Overlay Active</div>
+          <div class="window-title">Spotify Desktop &middot; Lyrix Live Sync</div>
           <div class="window-controls">
             <button id="themeToggle" class="preview-tag">Glow: Cyan</button>
           </div>
@@ -88,7 +101,6 @@
 
         <!-- Desktop Viewport -->
         <div class="desktop-stage" id="desktopStage">
-
           <!-- Simulated Spotify App Interface in Background -->
           <div class="spotify-app">
             <div class="spotify-main">
@@ -119,9 +131,9 @@
                     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
                   </div>
                   <div class="spotify-track-meta">
-                    <span class="spotify-tag">PLAYING FROM PLAYLIST</span>
+                    <span class="spotify-tag">NOW PLAYING</span>
                     <h3 class="spotify-track-name" id="spotifyTitle">Starboy</h3>
-                    <p class="spotify-track-sub" id="spotifyArtist">The Weeknd, Daft Punk &middot; Starboy &middot; 2016</p>
+                    <p class="spotify-track-sub" id="spotifyArtist">The Weeknd, Daft Punk &middot; Starboy</p>
                   </div>
                 </div>
 
@@ -179,112 +191,104 @@
               </div>
 
               <div class="bottom-right">
-                <span class="lyrix-live-badge">Lyrix Active</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                <span class="lyrix-live-badge">Overlay Active</span>
               </div>
             </div>
           </div>
-
-          <!-- Lyrix Floating Transparent Overlay (Draggable anywhere over desktop) -->
-          <div class="floating-overlay" id="interactiveOverlay">
-            <div class="overlay-grip"></div>
-            <div class="lyrics-container" id="lyricsRoll">
-              <div class="lyric-line line-prev" id="linePrev">I'm tryna put you in the worst mood, ah</div>
-              <div class="lyric-line line-current" id="lineCurrent">P1 cleaner than your church shoes, ah</div>
-              <div class="lyric-line line-next" id="lineNext">Milli point two just to hurt you, ah</div>
-            </div>
-          </div>
-
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Features Grid -->
+  <!-- Big Impact Feature Grid (Apple Style Copywriting) -->
   <section class="section" id="features">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Core Engineering Features</h2>
-        <p class="section-subtitle">Designed for minimal system intrusion, high frame-rate responsiveness, and background execution.</p>
+        <h2 class="section-title">Incredible technology. Pure simplicity.</h2>
+        <p class="section-subtitle">Engineered to be completely invisible until the moment you want to glance at a lyric.</p>
       </div>
 
       <div class="features-grid">
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           </div>
-          <h3 class="feature-title">Passive Media Streaming</h3>
-          <p class="feature-desc">Connects to macOS <code>mediaremoted</code> via an isolated daemon. Receives event streams without querying audio inputs or requesting system microphone permissions.</p>
+          <h3 class="feature-title">ProMotion Dragging</h3>
+          <p class="feature-desc">120Hz precision. Native hardware acceleration ensures the overlay glides effortlessly under your cursor with zero latency.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
-          <h3 class="feature-title">Sub-Second Timeline Interpolation</h3>
-          <p class="feature-desc">Compensates for delayed player metadata updates using dynamic timestamp delta interpolation: <code>elapsed + (rate &times; delta)</code>.</p>
+          <h3 class="feature-title">Sub-Second Sync</h3>
+          <p class="feature-desc">Always in lockstep. Continuous micro-interpolation keeps lyrics aligned down to the exact millisecond of every syllable.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="21" x2="9" y2="9"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
-          <h3 class="feature-title">120Hz ProMotion Dragging</h3>
-          <p class="feature-desc">Direct AppKit <code>window.performDrag(with:)</code> dispatch eliminates SwiftUI gesture feedback loops for zero-lag hardware-accelerated movement.</p>
+          <h3 class="feature-title">Ghost Mode</h3>
+          <p class="feature-desc">There when you need it. Invisible when you don’t. Turn on click-through to click, type, and work right through the overlay.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
-          <h3 class="feature-title">Click-Through Passthrough</h3>
-          <p class="feature-desc">Toggle <code>ignoresMouseEvents</code> instantly with global shortcuts to keep working behind the overlay without moving or closing the window.</p>
+          <h3 class="feature-title">Zero Impact Engine</h3>
+          <p class="feature-desc">Whisper quiet. 0.1% CPU usage and zero microphone recording. It passively senses system playback without draining battery.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <h3 class="feature-title">Plays with Everything</h3>
+          <p class="feature-desc">Universal compatibility across Zen Browser, Spotify, Apple Music, Chrome, and Arc. Start music anywhere; Lyrix handles the rest.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
           </div>
-          <h3 class="feature-title">LRCLIB Sync &amp; Disk Cache</h3>
-          <p class="feature-desc">Queries sanitized song metadata from LRCLIB and serializes parsed timestamps into <code>~/Library/Caches/Lyrix/</code>. 0 KB network on repeat listens.</p>
+          <h3 class="feature-title">Instant Offline Memory</h3>
+          <p class="feature-desc">One quick lookup, cached forever. Replaying your favorite songs uses zero bandwidth and loads instantly offline.</p>
         </div>
+      </div>
+    </div>
+  </section>
 
-        <div class="feature-card">
-          <div class="feature-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><line x1="6" y1="8" x2="6" y2="8"/><line x1="10" y1="8" x2="18" y2="8"/><line x1="6" y1="12" x2="6" y2="12"/><line x1="10" y1="12" x2="18" y2="12"/></svg>
+  <!-- Big Banner Experience -->
+  <section class="section section-dark" id="experience">
+    <div class="container">
+      <div class="experience-box">
+        <span class="experience-tag">PURE TRANSPARENCY</span>
+        <h2 class="experience-title">Designed to stay out of your way.</h2>
+        <p class="experience-desc">
+          Whether you're coding, writing, designing, or browsing, Lyrix gives you lyrics at a glance without stealing focus or cluttering your screen with bulky video players.
+        </p>
+        <div class="experience-shortcuts">
+          <div class="shortcut-item">
+            <span class="key-combo"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>L</kbd></span>
+            <span class="shortcut-label">Toggle Overlay</span>
           </div>
-          <h3 class="feature-title">Global Keybindings &amp; Customization</h3>
-          <p class="feature-desc">Includes an interactive shortcut recorder, configurable lyric glow colors, font scaling presets, and adjustable glass frost opacity.</p>
+          <div class="shortcut-item">
+            <span class="key-combo"><kbd>⌃</kbd><kbd>⌥</kbd><kbd>K</kbd></span>
+            <span class="shortcut-label">Toggle Ghost Mode</span>
+          </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Player Support -->
-  <section class="section section-dark">
+  <!-- Specifications Table -->
+  <section class="section" id="specs">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Universal Player Compatibility</h2>
-        <p class="section-subtitle">Supports all major desktop music applications and web browsers.</p>
-      </div>
-
-      <div class="players-row">
-        <div class="player-pill">Spotify Desktop</div>
-        <div class="player-pill">Zen Browser (YouTube Music)</div>
-        <div class="player-pill">Apple Music</div>
-        <div class="player-pill">Google Chrome</div>
-        <div class="player-pill">Arc Browser</div>
-        <div class="player-pill">Brave Browser</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Benchmarks Table -->
-  <section class="section" id="benchmarks">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Resource Utilization Profile</h2>
-        <p class="section-subtitle">Measured on Apple Silicon (M-series) running macOS 15+.</p>
+        <h2 class="section-title">Technical Specifications</h2>
+        <p class="section-subtitle">Performance measured on Apple Silicon Macs running macOS 15+.</p>
       </div>
 
       <div class="table-container">
@@ -292,66 +296,38 @@
           <thead>
             <tr>
               <th>Metric</th>
-              <th>Measurement</th>
-              <th>Architecture Rationale</th>
+              <th>Value</th>
+              <th>Detail</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>CPU Usage</strong></td>
+              <td><strong>CPU Impact</strong></td>
               <td><span class="tag tag-green">0.0% – 0.2%</span></td>
-              <td>Event-driven stream with 100ms math timer only during active playback</td>
+              <td>Event-driven stream; sleeps completely between track changes</td>
             </tr>
             <tr>
-              <td><strong>Memory Footprint (RSS)</strong></td>
+              <td><strong>Memory Footprint</strong></td>
               <td><span class="tag tag-blue">~82 MB</span></td>
-              <td>Native AppKit/SwiftUI framebuffers and in-memory LRC structure</td>
+              <td>SwiftUI &amp; AppKit framebuffers and in-memory lyrics cache</td>
             </tr>
             <tr>
-              <td><strong>Network Bandwidth</strong></td>
-              <td><span class="tag tag-cyan">~5 KB / track</span></td>
-              <td>Single GET request per unique track; 0 KB network on repeat plays</td>
+              <td><strong>Network Usage</strong></td>
+              <td><span class="tag tag-cyan">~5 KB</span></td>
+              <td>Single lightweight payload per track; 0 KB on repeat plays</td>
             </tr>
             <tr>
-              <td><strong>Installed Application Size</strong></td>
+              <td><strong>App Bundle Size</strong></td>
               <td><span class="tag tag-purple">5.5 MB</span></td>
-              <td>Fully standalone bundle containing embedded helper frameworks</td>
+              <td>100% standalone with embedded framework runtimes</td>
             </tr>
             <tr>
-              <td><strong>Battery Impact</strong></td>
-              <td><span class="tag tag-green">Negligible</span></td>
-              <td>App Nap compliant, no audio digital signal processing</td>
+              <td><strong>Compatibility</strong></td>
+              <td><span class="tag tag-green">Universal</span></td>
+              <td>Zen Browser, Spotify, Chrome, Apple Music, Arc, Brave</td>
             </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- Quickstart / Source build -->
-  <section class="section" id="architecture">
-    <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">Building from Source</h2>
-        <p class="section-subtitle">Compile and package a self-contained disk image using standard Swift toolchains.</p>
-      </div>
-
-      <div class="terminal-card">
-        <div class="terminal-header">
-          <span class="terminal-dot"></span>
-          <span class="terminal-dot"></span>
-          <span class="terminal-dot"></span>
-          <span class="terminal-title">zsh — Terminal</span>
-        </div>
-        <pre class="terminal-body"><code><span class="token-comment"># Clone repository</span>
-git clone https://github.com/narix/lyrix.git
-cd lyrix
-
-<span class="token-comment"># Build optimized release binary</span>
-swift build -c release
-
-<span class="token-comment"># Build standalone .app bundle and DMG installer</span>
-./scripts/build_dmg.sh</code></pre>
       </div>
     </div>
   </section>
@@ -361,14 +337,14 @@ swift build -c release
     <div class="container footer-container">
       <div class="footer-left">
         <span class="footer-brand">Lyrix</span>
-        <span class="footer-desc">Open-source floating lyrics for macOS.</span>
+        <span class="footer-desc">Crafted for macOS. Open source.</span>
       </div>
 
       <div class="footer-links">
-        <a href="https://github.com/narix/lyrix" target="_blank" rel="noopener noreferrer">GitHub Repository</a>
+        <a href="https://github.com/narix/lyrix" target="_blank" rel="noopener noreferrer">GitHub</a>
         <a href="https://github.com/narix/lyrix/releases" target="_blank" rel="noopener noreferrer">Releases</a>
         <a href="https://github.com/narix/lyrix/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT License</a>
-        <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer" class="footer-author">Developer: Kiran S Baliga (baliga.dev)</a>
+        <a href="https://baliga.dev" target="_blank" rel="noopener noreferrer" class="footer-author">By Kiran S Baliga</a>
       </div>
     </div>
   </footer>

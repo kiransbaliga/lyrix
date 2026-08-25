@@ -1,4 +1,4 @@
-// Interactive Live Preview: Spotify Player + Lyrix Floating Overlay
+// Lyrix Interactive Controller: Spotify Sync + Unrestricted Global Draggable Overlay
 
 const sampleTracks = [
   {
@@ -73,7 +73,7 @@ const rowTrackName = document.getElementById("rowTrackName");
 const rowArtistName = document.getElementById("rowArtistName");
 
 const themeToggle = document.getElementById("themeToggle");
-const interactiveOverlay = document.getElementById("interactiveOverlay");
+const overlay = document.getElementById("interactiveOverlay");
 
 function formatTime(sec) {
   const m = Math.floor(sec / 60);
@@ -170,7 +170,6 @@ function startLoop() {
     currentSeconds += 1;
     const track = sampleTracks[trackIndex];
     
-    // Check if next lyric should trigger
     if (lyricIndex < track.lyrics.length - 1) {
       if (currentSeconds >= track.lyrics[lyricIndex + 1].time) {
         lyricIndex++;
@@ -195,30 +194,67 @@ function cycleTheme() {
   document.documentElement.style.setProperty("--accent-cyan", theme.hex);
 }
 
-// Draggable Overlay Simulation inside desktop stage
+// =========================================================================
+// UNRESTRICTED GLOBAL DRAGGING (Anywhere on the entire browser window!)
+// =========================================================================
 let isDragging = false;
-let startX = 0, startY = 0;
-let currentX = 0, currentY = 0;
+let startPointerX = 0, startPointerY = 0;
+let overlayLeft = 0, overlayTop = 0;
 
-interactiveOverlay.addEventListener("mousedown", (e) => {
+overlay.addEventListener("pointerdown", (e) => {
+  // Ignore clicks on buttons inside overlay if any
+  if (e.target.closest("button, a")) return;
+
   isDragging = true;
-  startX = e.clientX - currentX;
-  startY = e.clientY - currentY;
-  interactiveOverlay.style.cursor = "grabbing";
+  overlay.setPointerCapture(e.pointerId);
+
+  // Capture current bounding rect
+  const rect = overlay.getBoundingClientRect();
+  overlayLeft = rect.left;
+  overlayTop = rect.top;
+
+  startPointerX = e.clientX;
+  startPointerY = e.clientY;
+
+  // Switch overlay to fixed inline coordinates
+  overlay.style.right = "auto";
+  overlay.style.bottom = "auto";
+  overlay.style.left = `${overlayLeft}px`;
+  overlay.style.top = `${overlayTop}px`;
+  overlay.style.cursor = "grabbing";
 });
 
-window.addEventListener("mousemove", (e) => {
+overlay.addEventListener("pointermove", (e) => {
   if (!isDragging) return;
-  currentX = Math.max(-40, Math.min(220, e.clientX - startX));
-  currentY = Math.max(-20, Math.min(180, e.clientY - startY));
-  interactiveOverlay.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+
+  const deltaX = e.clientX - startPointerX;
+  const deltaY = e.clientY - startPointerY;
+
+  let newX = overlayLeft + deltaX;
+  let newY = overlayTop + deltaY;
+
+  // Safe viewport bounds clamping
+  const maxX = window.innerWidth - overlay.offsetWidth - 10;
+  const maxY = window.innerHeight - overlay.offsetHeight - 10;
+
+  newX = Math.max(10, Math.min(maxX, newX));
+  newY = Math.max(10, Math.min(maxY, newY));
+
+  overlay.style.left = `${newX}px`;
+  overlay.style.top = `${newY}px`;
 });
 
-window.addEventListener("mouseup", () => {
+function stopDrag(e) {
   if (!isDragging) return;
   isDragging = false;
-  interactiveOverlay.style.cursor = "grab";
-});
+  try {
+    overlay.releasePointerCapture(e.pointerId);
+  } catch (err) {}
+  overlay.style.cursor = "grab";
+}
+
+overlay.addEventListener("pointerup", stopDrag);
+overlay.addEventListener("pointercancel", stopDrag);
 
 // Event Bindings
 playPauseBtn.addEventListener("click", togglePlayback);
