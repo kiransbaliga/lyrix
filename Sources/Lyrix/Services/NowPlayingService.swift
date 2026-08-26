@@ -176,12 +176,16 @@ final class NowPlayingService: ObservableObject {
     private func findMediaControlBinary() -> String? {
         var candidates: [String] = []
 
-        // 1. Inside App Bundle (same folder as executable or Resources)
+        // 1. Inside App Bundle Resources (standard signed structure)
+        if let resDir = Bundle.main.resourceURL?.path {
+            candidates.append("\(resDir)/media-control/bin/media-control")
+        }
+        if let resURL = Bundle.main.url(forResource: "media-control", withExtension: nil, subdirectory: "media-control/bin")?.path {
+            candidates.append(resURL)
+        }
         if let bundleDir = Bundle.main.executableURL?.deletingLastPathComponent().path {
             candidates.append("\(bundleDir)/media-control")
-        }
-        if let resURL = Bundle.main.url(forResource: "media-control", withExtension: nil)?.path {
-            candidates.append(resURL)
+            candidates.append("\(bundleDir)/../Resources/media-control/bin/media-control")
         }
 
         // 2. System / Homebrew paths

@@ -13,8 +13,8 @@ DMG_OUTPUT="$DIR/dist/Lyrix-Installer.dmg"
 
 rm -rf "$DIR/dist"
 mkdir -p "$APP_DIR/Contents/MacOS"
-mkdir -p "$APP_DIR/Contents/Resources"
-mkdir -p "$APP_DIR/Contents/lib"
+mkdir -p "$APP_DIR/Contents/Resources/media-control/bin"
+mkdir -p "$APP_DIR/Contents/Resources/media-control/lib/media-control"
 mkdir -p "$APP_DIR/Contents/Frameworks"
 
 echo "🎨 Step 2: Preparing assets (Black squircle icon & white text background)..."
@@ -24,18 +24,22 @@ echo "📦 Step 3: Assembling Lyrix.app bundle..."
 cp "$BUILD_DIR/Lyrix" "$APP_DIR/Contents/MacOS/Lyrix"
 chmod +x "$APP_DIR/Contents/MacOS/Lyrix"
 
-# Bundle full media-control runtime (script + helper framework + adapter) for 100% standalone operation
+# Bundle full media-control framework runtime inside Resources & Frameworks
 BREW_MC="/opt/homebrew/Cellar/media-control/0.7.6"
 if [ -d "$BREW_MC" ]; then
-    cp "$BREW_MC/bin/media-control" "$APP_DIR/Contents/MacOS/media-control"
-    cp -R "$BREW_MC/lib/"* "$APP_DIR/Contents/lib/"
+    cp "$BREW_MC/bin/media-control" "$APP_DIR/Contents/Resources/media-control/bin/media-control"
+    cp -R "$BREW_MC/lib/media-control/"* "$APP_DIR/Contents/Resources/media-control/lib/media-control/"
     cp -R "$BREW_MC/Frameworks/"* "$APP_DIR/Contents/Frameworks/"
     
-    chmod +x "$APP_DIR/Contents/MacOS/media-control"
-    chmod +x "$APP_DIR/Contents/lib/media-control/mediaremote-adapter.pl"
-    chmod +x "$APP_DIR/Contents/lib/media-control/MediaRemoteAdapterTestClient"
-    chmod +x "$APP_DIR/Contents/Frameworks/MediaRemoteAdapter.framework/MediaRemoteAdapter"
-    echo "  ✅ Bundled full media-control framework runtime inside Lyrix.app"
+    # Symlink Frameworks for perl script relative path resolution
+    ln -s ../../Frameworks "$APP_DIR/Contents/Resources/media-control/Frameworks"
+    
+    chmod +x "$APP_DIR/Contents/Resources/media-control/bin/media-control"
+    chmod +x "$APP_DIR/Contents/Resources/media-control/lib/media-control/mediaremote-adapter.pl"
+    chmod +x "$APP_DIR/Contents/Resources/media-control/lib/media-control/MediaRemoteAdapterTestClient"
+    chmod -R u+w "$APP_DIR/Contents/Frameworks"
+    chmod +x "$APP_DIR/Contents/Frameworks/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter"
+    echo "  ✅ Bundled standalone framework runtime inside Resources/ & Frameworks/"
 fi
 
 # Write Info.plist
@@ -70,13 +74,25 @@ cat << 'EOF' > "$APP_DIR/Contents/Info.plist"
 </plist>
 EOF
 
-echo "🚀 Step 4: Building precision DMG with dmgbuild..."
+echo "🔐 Step 4: Signing bundle and embedded Mach-O binaries..."
+chmod -R u+w "$APP_DIR"
+codesign --force --sign - --timestamp=none "$APP_DIR/Contents/Frameworks/MediaRemoteAdapter.framework/Versions/A/MediaRemoteAdapter" 2>/dev/null || true
+codesign --force --sign - --timestamp=none "$APP_DIR/Contents/Frameworks/MediaRemoteAdapter.framework" 2>/dev/null || true
+codesign --force --sign - --timestamp=none "$APP_DIR/Contents/Resources/media-control/lib/media-control/MediaRemoteAdapterTestClient" 2>/dev/null || true
+codesign --force --sign - --timestamp=none "$APP_DIR/Contents/MacOS/Lyrix"
+codesign --force --sign - --timestamp=none "$APP_DIR"
+
+echo "  Verifying code signature:"
+codesign -vvv --deep "$APP_DIR"
+echo "  ✅ Signature valid on disk"
+
+echo "🚀 Step 5: Building precision DMG with dmgbuild..."
 rm -f "$DMG_OUTPUT"
 python3 -m dmgbuild -s "$DIR/scripts/dmgbuild_settings.py" "Lyrix Installer" "$DMG_OUTPUT"
 
 rm -f "$DIR/dist/dmg_background.png" "$DIR/dist/dmg_background@2x.png" "$DIR/dist/master_icon.png"
 rm -rf "$DIR/dist/AppIcon.iconset"
 
-echo "✨ SUCCESS! Created standalone installer at:"
+echo "✨ SUCCESS! Created signed installer at:"
 echo "👉 $DMG_OUTPUT"
 ls -lh "$DMG_OUTPUT"
