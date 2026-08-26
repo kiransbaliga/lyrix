@@ -82,6 +82,12 @@ private struct LyrixMenuContent: View {
             appDelegate.toggleOverlay()
         }
 
+        // Center overlay on screen
+        Button("Center Overlay on Screen") {
+            appDelegate.overlayController.resetPositionToCenter()
+            appDelegate.isOverlayVisible = true
+        }
+
         // Toggle click-through with dynamic shortcut hint
         Button("\(appDelegate.isClickThrough ? "Disable Click-Through" : "Enable Click-Through")   (\(settings.toggleClickThroughShortcut.displayString))") {
             appDelegate.toggleClickThrough()

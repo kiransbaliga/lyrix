@@ -275,10 +275,40 @@ code {
 
 .hero-title {
   font-size: 3rem;
-  line-height: 1.1;
+  line-height: 1.15;
   font-weight: 800;
   letter-spacing: -0.04em;
   margin-bottom: 18px;
+  min-height: 2.35em;
+  display: block;
+}
+
+.typewriter-text {
+  background: linear-gradient(180deg, #FFFFFF 40%, #D2D8E6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline;
+}
+
+.typewriter-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 0.85em;
+  background-color: var(--accent-cyan);
+  margin-left: 4px;
+  vertical-align: -0.06em;
+  border-radius: 2px;
+  box-shadow: 0 0 10px var(--glow-color);
+  animation: cursorBlink 0.9s ease-in-out infinite;
+}
+
+@keyframes cursorBlink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .hero-subtitle {
@@ -638,6 +668,27 @@ code {
   justify-content: flex-end;
 }
 
+.spotify-volume-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8E8E93;
+}
+
+.volume-bar-track {
+  width: 60px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.volume-bar-level {
+  width: 70%;
+  height: 100%;
+  background: #FFFFFF;
+}
+
 .audio-notice {
   padding: 6px 16px;
   background: #0D0E12;
@@ -888,7 +939,8 @@ kbd {
 
 @media (max-width: 640px) {
   .hero-title {
-    font-size: 2.3rem;
+    font-size: 2.1rem;
+    min-height: 2.6em;
   }
   .features-grid {
     grid-template-columns: 1fr;

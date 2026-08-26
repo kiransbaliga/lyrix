@@ -20,6 +20,24 @@ const sampleTracks = [
     ]
   },
   {
+    title: "Viva La Vida",
+    artist: "Coldplay",
+    album: "Viva La Vida",
+    duration: 242,
+    lyrics: [
+      { time: 12, text: "I used to rule the world" },
+      { time: 16, text: "Seas would rise when I gave the word" },
+      { time: 21, text: "Now in the morning I sleep alone" },
+      { time: 26, text: "Sweep the streets I used to own" },
+      { time: 31, text: "I used to roll the dice" },
+      { time: 36, text: "Feel the fear in my enemy's eyes" },
+      { time: 41, text: "Listen as the crowd would sing" },
+      { time: 46, text: "Now the old king is dead, long live the king" },
+      { time: 52, text: "One minute I held the key" },
+      { time: 57, text: "Next the walls were closed on me" }
+    ]
+  },
+  {
     title: "Claw Marks",
     artist: "panicbaby",
     album: "Claw Marks",
@@ -262,8 +280,58 @@ nextTrackBtn.addEventListener("click", stepForward);
 prevTrackBtn.addEventListener("click", stepBackward);
 themeToggle.addEventListener("click", cycleTheme);
 
+// =========================================================================
+// Wholesome & Relatable Dynamic Hero Typewriter Effect
+// =========================================================================
+const typewriterPhrases = [
+  "Music you can glance at.",
+  "Sing along to every chorus.",
+  "Scream your heart out to your favourite song.",
+  "Turn late-night focus into karaoke.",
+  "Catch every lyric without losing your flow.",
+  "Whisper the verses, belt out the bridge.",
+  "Feel every word as the music moves."
+];
+
+let phraseIndex = 0;
+let charIndex = typewriterPhrases[0].length;
+let isDeleting = true;
+const typewriterEl = document.getElementById("typewriterText");
+
+function runTypewriter() {
+  if (!typewriterEl) return;
+  const currentPhrase = typewriterPhrases[phraseIndex];
+
+  if (isDeleting) {
+    charIndex--;
+    typewriterEl.textContent = currentPhrase.substring(0, charIndex);
+
+    if (charIndex <= 0) {
+      isDeleting = false;
+      phraseIndex = (phraseIndex + 1) % typewriterPhrases.length;
+      setTimeout(runTypewriter, 350);
+      return;
+    }
+    setTimeout(runTypewriter, 35);
+  } else {
+    charIndex++;
+    typewriterEl.textContent = currentPhrase.substring(0, charIndex);
+
+    if (charIndex >= currentPhrase.length) {
+      isDeleting = true;
+      setTimeout(runTypewriter, 2400); // pause when phrase is complete
+      return;
+    }
+    setTimeout(runTypewriter, 65);
+  }
+}
+
 // Initialize
 updateTrackUI();
 updateLyricsUI(false);
 updateProgress();
 startLoop();
+
+// Start deleting the first line after an initial reading pause
+setTimeout(runTypewriter, 2000);
+

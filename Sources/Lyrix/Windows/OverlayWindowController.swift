@@ -13,7 +13,8 @@ final class OverlayWindowController {
 
     func showOverlay<Content: View>(with rootView: Content) {
         if let window {
-            window.orderFront(nil)
+            ensureOnScreen(window)
+            window.orderFrontRegardless()
             return
         }
 
@@ -44,7 +45,7 @@ final class OverlayWindowController {
         win.contentView = hosting
         win.isReleasedWhenClosed = false
 
-        // Restore saved position or center on screen
+        // Restore saved position or center on screen safely
         restorePosition(for: win)
         win.orderFrontRegardless()
 
@@ -92,7 +93,21 @@ final class OverlayWindowController {
         window?.ignoresMouseEvents = enabled
     }
 
-    // MARK: - Position persistence
+    // MARK: - Position Management & Safe Screen Clamping
+
+    func resetPositionToCenter() {
+        guard let window else { return }
+        if let screen = NSScreen.main {
+            let screenFrame = screen.visibleFrame
+            let x = screenFrame.midX - (window.frame.width / 2)
+            let y = screenFrame.maxY - window.frame.height - 80
+            window.setFrameOrigin(NSPoint(x: x, y: y))
+        } else {
+            window.center()
+        }
+        window.orderFrontRegardless()
+        savePosition()
+    }
 
     func savePosition() {
         guard let origin = window?.frame.origin else { return }
@@ -108,10 +123,37 @@ final class OverlayWindowController {
             if parts.count == 2,
                let x = Double(parts[0]),
                let y = Double(parts[1]) {
-                window.setFrameOrigin(NSPoint(x: x, y: y))
-                return
+                let targetRect = NSRect(x: x, y: y, width: window.frame.width, height: window.frame.height)
+                
+                // Validate that this saved coordinate is on one of the currently active screens
+                let isVisibleOnAnyScreen = NSScreen.screens.contains { screen in
+                    screen.visibleFrame.intersects(targetRect)
+                }
+                
+                if isVisibleOnAnyScreen {
+                    window.setFrameOrigin(NSPoint(x: x, y: y))
+                    return
+                }
             }
         }
-        window.center()
+
+        // Default: Top-center of primary screen
+        if let screen = NSScreen.main {
+            let screenFrame = screen.visibleFrame
+            let x = screenFrame.midX - (window.frame.width / 2)
+            let y = screenFrame.maxY - window.frame.height - 80
+            window.setFrameOrigin(NSPoint(x: x, y: y))
+        } else {
+            window.center()
+        }
+    }
+
+    private func ensureOnScreen(_ window: NSWindow) {
+        let isVisibleOnAnyScreen = NSScreen.screens.contains { screen in
+            screen.visibleFrame.intersects(window.frame)
+        }
+        if !isVisibleOnAnyScreen {
+            resetPositionToCenter()
+        }
     }
 }

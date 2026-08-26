@@ -108,9 +108,11 @@
   <section class="hero">
     <div class="hero-content">
       <div class="pill-badge">Designed for macOS Sonoma &amp; Sequoia</div>
-      <h1 class="hero-title">Music you can glance at.</h1>
+      <h1 class="hero-title">
+        <span class="typewriter-text" id="typewriterText">Music you can glance at.</span><span class="typewriter-cursor" aria-hidden="true"></span>
+      </h1>
       <p class="hero-subtitle">
-        Lyrix floats seamlessly above your workspace. It listens to whatever you’re playing and delivers time-synced lyrics with fluid ProMotion motion and pure transparency.
+        Lyrix floats seamlessly above your workspace. It listens to whatever you’re playing and delivers time-synced lyrics with fluid ProMotion motion and pure transparency. Hum along, glance at the words, or scream your heart out to your favorite songs without missing a beat.
       </p>
 
       <div class="hero-cta">
@@ -241,7 +243,10 @@
               </div>
 
               <div class="bottom-right">
-                <span class="lyrix-live-badge">Overlay Active</span>
+                <div class="spotify-volume-widget">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+                  <div class="volume-bar-track"><div class="volume-bar-level"></div></div>
+                </div>
               </div>
             </div>
             <!-- Audio copyright notice for interactive simulator -->
@@ -258,8 +263,8 @@
   <section class="section" id="features">
     <div class="container">
       <div class="section-header">
-        <h2 class="section-title">Incredible technology. Pure simplicity.</h2>
-        <p class="section-subtitle">Engineered to be completely invisible until the moment you want to glance at a lyric.</p>
+        <h2 class="section-title">Incredible technology. Pure musical joy.</h2>
+        <p class="section-subtitle">Engineered to stay completely invisible until you want to glance, hum, or sing along.</p>
       </div>
 
       <div class="features-grid">
@@ -268,7 +273,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
           </div>
           <h3 class="feature-title">ProMotion Dragging</h3>
-          <p class="feature-desc">120Hz precision. Native hardware acceleration ensures the overlay glides effortlessly under your cursor with zero latency.</p>
+          <p class="feature-desc">120Hz precision. Native hardware acceleration ensures the overlay glides effortlessly anywhere on your display with zero input lag.</p>
         </div>
 
         <div class="feature-card">
@@ -276,7 +281,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
           <h3 class="feature-title">Sub-Second Sync</h3>
-          <p class="feature-desc">Always in lockstep. Continuous micro-interpolation keeps lyrics aligned down to the exact millisecond of every syllable.</p>
+          <p class="feature-desc">Sing in perfect harmony. Continuous micro-interpolation keeps lyrics aligned down to the exact millisecond of every syllable.</p>
         </div>
 
         <div class="feature-card">
@@ -284,15 +289,15 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
           </div>
           <h3 class="feature-title">Ghost Mode</h3>
-          <p class="feature-desc">There when you need it. Invisible when you don’t. Turn on click-through to click, type, and work right through the overlay.</p>
+          <p class="feature-desc">There when you sing. Invisible when you work. Turn on click-through to click, type, and code right through the floating lyrics.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           </div>
-          <h3 class="feature-title">Zero Impact Engine</h3>
-          <p class="feature-desc">Whisper quiet. 0.1% CPU usage and zero microphone recording. It passively senses system playback without draining battery.</p>
+          <h3 class="feature-title">Zero Distraction Engine</h3>
+          <p class="feature-desc">Whisper quiet. Uses 0.1% CPU and never touches your microphone. It passively detects system playback without draining battery.</p>
         </div>
 
         <div class="feature-card">
@@ -300,7 +305,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </div>
           <h3 class="feature-title">Plays with Everything</h3>
-          <p class="feature-desc">Universal compatibility across Zen Browser, Spotify, Apple Music, Chrome, and Arc. Start music anywhere; Lyrix handles the rest.</p>
+          <p class="feature-desc">Universal compatibility across Spotify, Apple Music, Zen Browser, Chrome, Brave, and Arc. Play your tracks anywhere; Lyrix catches every beat.</p>
         </div>
 
         <div class="feature-card">
@@ -308,7 +313,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>
           </div>
           <h3 class="feature-title">Instant Offline Memory</h3>
-          <p class="feature-desc">One quick lookup, cached forever. Replaying your favorite songs uses zero bandwidth and loads instantly offline.</p>
+          <p class="feature-desc">Ready for your favorite anthems. Synced lyrics are cached locally so repeat listens load instantaneously with zero network requests.</p>
         </div>
       </div>
     </div>
@@ -319,9 +324,9 @@
     <div class="container">
       <div class="experience-box">
         <span class="experience-tag">PURE TRANSPARENCY</span>
-        <h2 class="experience-title">Designed to stay out of your way.</h2>
+        <h2 class="experience-title">Designed to stay out of your way — and keep you in the groove.</h2>
         <p class="experience-desc">
-          Whether you're coding, writing, designing, or browsing, Lyrix gives you lyrics at a glance without stealing focus or cluttering your screen with bulky video players.
+          Whether you're writing code, designing, drafting essays, or singing your heart out during a late-night session, Lyrix gives you lyrics at a glance without cluttering your screen or stealing focus.
         </p>
         <div class="experience-shortcuts">
           <div class="shortcut-item">
